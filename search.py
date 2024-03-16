@@ -1,24 +1,31 @@
 import os
 import re
+import time
+import sys
 
 folder = input("Specify the domain: ")
 
 kw = input("Specify your search string: ")
 
-localpath = path = os.path.dirname(os.path.abspath(__file__))
+if getattr(sys, 'frozen', False):
+    localpath = os.path.dirname(sys.executable)
+else:
+    localpath = os.path.dirname(os.path.abspath(__file__))
 
-files = os.listdir(localpath + "/" + folder)
+repo = os.listdir(localpath + "/" + folder)
 
 print("\nMatches: \n")
 
-for file in files:
+for file in repo:
     try:
-        data = open(localpath + "/" + folder + "/" + file).read()
+        data = open(localpath + "/" + folder + "/" + file, encoding = 'Latin1').read()
     except Exception as e:
-        print(e)
+        print("Error reading file, check manually:",file)
         continue
     if re.search(kw, data, flags=re.IGNORECASE):
         if not file.endswith("robots.txt"):
-            print(file.replace("£", "/").replace(".txt", ""))
+            print(file.replace("£", "/").replace(".txt", "").replace("!!!", ":").replace("§§", "?"))
         else:
-            print(file.replace("£", "/"))
+            print(file.replace("£", "/").replace("!!!", ":").replace("§§", "?"))
+
+input("Search Finished. Press Enter to exit...")
